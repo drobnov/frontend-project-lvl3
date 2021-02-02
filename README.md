@@ -6,4 +6,4 @@ This repository contains project * "RSS Reader" *, carried out during the traini
 [![Actions Status](https://github.com/drobnov/frontend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/drobnov/frontend-project-lvl3/actions)  ![Node CI](https://github.com/drobnov/frontend-project-lvl3/workflows/Node%20CI/badge.svg)  <a href="https://codeclimate.com/github/drobnov/frontend-project-lvl3/maintainability"><img src="https://api.codeclimate.com/v1/badges/0803201ca6bca295f1ec/maintainability" /></a>
 
 ### link to the site:
-frontend-project-lvl3-30udgnhmu.vercel.app
+https://frontend-project-lvl3-l9u8vo61y.vercel.app
