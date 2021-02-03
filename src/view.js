@@ -1,13 +1,24 @@
 // @ts-check
 
 import onChange from 'on-change';
+import i18n from 'i18next';
+import text from './text.js';
 
-const errors = {
-  inValidUrl: 'Must be valid url',
-  inValidRss: "This source doesn't contain valid rss",
-  rssExists: 'Rss already exists',
-  networkError: 'Network error',
+const runApp = () => {
+  i18n.init({
+    lng: 'en',
+    debug: true,
+    resources: {
+      en: {
+        translation: {
+          ...text,
+        },
+      },
+    },
+  });
 };
+const initPromise = Promise.resolve();
+initPromise.then(() => runApp());
 
 const input = document.querySelector('input[name="url"]');
 const divFeedback = document.querySelector('div.feedback');
@@ -15,26 +26,26 @@ const divFeedback = document.querySelector('div.feedback');
 const renderingErrors = (error) => {
   if (error === 'inValidUrl') {
     input.classList.add('is-invalid');
-    divFeedback.textContent = errors[error];
+    divFeedback.textContent = i18n.t(`errors.${error}`);
     divFeedback.classList.add('text-danger');
   } else if (error === '') {
     input.classList.remove('is-invalid');
     divFeedback.textContent = '';
     divFeedback.classList.remove('text-danger');
   } else {
-    divFeedback.textContent = errors[error];
+    divFeedback.textContent = i18n.t(`errors.${error}`);
     divFeedback.classList.add('text-danger');
   }
 };
 
 const renderingSuccess = () => {
-  divFeedback.textContent = 'Rss has been loaded';
+  divFeedback.textContent = i18n.t('success');
   divFeedback.classList.add('text-success');
 };
 
-const createsH2 = (text) => {
+const createsH2 = (content) => {
   const h2 = document.createElement('h2');
-  h2.textContent = text;
+  h2.textContent = content;
   return h2;
 };
 
@@ -48,7 +59,7 @@ const createsHtmlEl = (htmlElement, attributesValues = {}) => {
 const renderingFeeds = (feeds) => {
   const feedsDiv = document.querySelector('.feeds');
   feedsDiv.innerHTML = '';
-  const h2 = createsH2('Feeds');
+  const h2 = createsH2(i18n.t('h2.feeds'));
   const ul = createsHtmlEl('ul', { class: 'list-group mb-5' });
   const fedsList = feeds.map((feed) => {
     const { title, description } = feed;
@@ -69,7 +80,7 @@ const renderingFeeds = (feeds) => {
 const renderingPosts = (posts) => {
   const postsDiv = document.querySelector('.posts');
   postsDiv.innerHTML = '';
-  const h2 = createsH2('Posts');
+  const h2 = createsH2(i18n.t('h2.posts'));
   const ul = createsHtmlEl('ul', { class: 'list-group' });
   const postsList = posts.map((post) => {
     const {
@@ -83,7 +94,7 @@ const renderingPosts = (posts) => {
     const button = createsHtmlEl('button', {
       type: 'button', class: 'btn btn-primary btn-sm', 'data-id': id, 'data-toggle': 'modal', 'data-target': '#modal',
     });
-    button.textContent = 'Preview';
+    button.textContent = i18n.t('button.preview');
     li.append(a);
     li.append(button);
     return li;
