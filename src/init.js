@@ -44,7 +44,7 @@ const addNewFeedPosts = (data, watched, state) => {
   }
 };
 
-const updatePosts = (url, watch) => {
+const updatePost = (url, watch) => {
   const watchedState = watch;
   setTimeout(() => getContentsRss(url)
     .then((response) => response.data)
@@ -54,7 +54,7 @@ const updatePosts = (url, watch) => {
       const newPosts = xorBy(parse.posts, postsFeed, 'link');
       watchedState.posts = [...newPosts, ...watchedState.posts];
     })
-    .finally(() => updatePosts(url, watch)), 5000);
+    .finally(() => updatePost(url, watch)), 5000);
 };
 
 const init = () => {
@@ -105,7 +105,7 @@ const init = () => {
             });
         }
       })
-      .then(() => updatePosts(state.url, watchedState));
+      .then(() => updatePost(state.url, watchedState));
   });
 };
 
