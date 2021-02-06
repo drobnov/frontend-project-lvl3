@@ -104,8 +104,7 @@ const init = () => {
               watchedState.error = 'networkError';
             });
         }
-      })
-      .then(() => updatePost(state.url, watchedState));
+      });
   });
 };
 
