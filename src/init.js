@@ -2,6 +2,7 @@
 
 import axios from 'axios';
 import * as yup from 'yup';
+import { xorBy } from 'lodash';
 import onChange from './view.js';
 import parseRss from './parser.js';
 
@@ -19,11 +20,49 @@ const isDuplicateFeeds = (link, feeds) => {
   return result;
 };
 
+const getContentsRss = (url) => axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(url)}`);
+
+const parsers = (data, url) => {
+  const content = data.contents;
+  const parse = parseRss(content, url);
+  return parse;
+};
+
+const addNewFeedPosts = (data, watched, state) => {
+  const watchedState = watched;
+  const parse = parsers(data, state.url);
+  if (parse === null) {
+    watchedState.error = 'inValidRss';
+  } else if (!isDuplicateFeeds(parse.feeds.link, state.feeds)) {
+    watchedState.error = 'rssExists';
+  } else {
+    watchedState.error = '';
+    watchedState.success = 'success';
+    watchedState.feeds = [parse.feeds, ...watchedState.feeds];
+    watchedState.posts = [...parse.posts, ...watchedState.posts];
+    watchedState.listUrl = [...watchedState.listUrl, state.url];
+  }
+};
+
+const updatePosts = (url, watch) => {
+  const watchedState = watch;
+  setTimeout(() => getContentsRss(url)
+    .then((response) => response.data)
+    .then((data) => {
+      const parse = parsers(data, url);
+      const postsFeed = watchedState.posts.filter((post) => post.rssLink === url);
+      const newPosts = xorBy(parse.posts, postsFeed, 'link');
+      watchedState.posts = [...newPosts, ...watchedState.posts];
+    })
+    .finally(() => updatePosts(url, watch)), 5000);
+};
+
 const init = () => {
   const state = {
     valid: true,
     error: '',
     url: '',
+    listUrl: [],
     feeds: [],
     posts: [],
     success: '',
@@ -55,28 +94,18 @@ const init = () => {
       })
       .then(() => {
         if (state.valid) {
-          axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(state.url)}`)
+          getContentsRss(state.url)
             .then((response) => response.data)
             .then((data) => {
-              const content = data.contents;
-              const parse = parseRss(content);
-              if (parse === null) {
-                watchedState.error = 'inValidRss';
-              } else if (!isDuplicateFeeds(parse.feeds.link, state.feeds)) {
-                watchedState.error = 'rssExists';
-              } else {
-                watchedState.error = '';
-                watchedState.success = 'success';
-                watchedState.feeds = [parse.feeds, ...watchedState.feeds];
-                watchedState.posts = [...parse.posts, ...watchedState.posts];
-              }
+              addNewFeedPosts(data, watchedState, state);
             })
             .catch((error) => {
               console.log(error);
               watchedState.error = 'networkError';
             });
         }
-      });
+      })
+      .then(() => updatePosts(state.url, watchedState));
   });
 };
 
