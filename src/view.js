@@ -77,7 +77,7 @@ const renderingFeeds = (feeds) => {
   feedsDiv.append(ul);
 };
 
-const renderingPosts = (posts) => {
+const renderingPosts = (posts, openPosts) => {
   const postsDiv = document.querySelector('.posts');
   postsDiv.innerHTML = '';
   const h2 = createsH2(i18n.t('h2.posts'));
@@ -87,8 +87,9 @@ const renderingPosts = (posts) => {
       title, link, id,
     } = post;
     const li = createsHtmlEl('li', { class: 'list-group-item d-flex justify-content-between align-items-start' });
+    const classElementA = openPosts.includes(id) ? 'font-weight-normal' : 'font-weight-bold';
     const a = createsHtmlEl('a', {
-      href: link, class: 'font-weight-bold', 'data-id': id, target: '_blank', rel: 'noopener noreferrer',
+      href: link, class: classElementA, 'data-id': id, target: '_blank', rel: 'noopener noreferrer',
     });
     a.textContent = title;
     const button = createsHtmlEl('button', {
@@ -102,6 +103,46 @@ const renderingPosts = (posts) => {
   postsList.forEach((li) => ul.append(li));
   postsDiv.append(h2);
   postsDiv.append(ul);
+};
+
+const renderingModalClass = (valuesId) => {
+  const id = valuesId[valuesId.length - 1];
+  const element = document.querySelector(`a[data-id="${id}"]`);
+  element.setAttribute('class', 'font-weight-normal');
+};
+
+const renderingModalOpen = (modalId, posts) => {
+  const body = document.querySelector('body');
+  const divModal = document.querySelector('#modal');
+  if (modalId !== null) {
+    const postModal = posts.filter((post) => post.id === modalId);
+    const { title, description, link } = postModal[0];
+    body.classList.add('modal-open');
+    body.setAttribute('style', 'padding-right: 15px;');
+    divModal.classList.add('show');
+    divModal.removeAttribute('aria-hidden');
+    divModal.setAttribute('style', 'display: block; padding-right: 15px;');
+    divModal.setAttribute('aria-modal', 'true');
+    const modalHeader = document.querySelector('.modal-header > h5');
+    modalHeader.textContent = title;
+    const modalBody = document.querySelector('.modal-body');
+    modalBody.textContent = description;
+    const modalArticle = document.querySelector('.modal-footer > a');
+    // @ts-ignore
+    modalArticle.href = link;
+    const modalBackdrop = createsHtmlEl('div', { class: 'modal-backdrop fade show' });
+    const footer = document.querySelector('footer');
+    footer.after(modalBackdrop);
+  } else {
+    const modalBackdrop = document.querySelector('.modal-backdrop');
+    modalBackdrop.remove();
+    body.classList.remove('modal-open');
+    body.removeAttribute('style');
+    divModal.classList.remove('show');
+    divModal.removeAttribute('aria-modal');
+    divModal.setAttribute('aria-hidden', 'true');
+    divModal.removeAttribute('style');
+  }
 };
 
 export default (state) => {
@@ -121,7 +162,11 @@ export default (state) => {
       form.reset();
       renderingFeeds(watchedState.feeds);
     } if (path === 'posts') {
-      renderingPosts(watchedState.posts);
+      renderingPosts(watchedState.posts, watchedState.openPosts);
+    } if (path === 'openPosts') {
+      renderingModalClass(value);
+    } if (path === 'modal') {
+      renderingModalOpen(value, watchedState.posts);
     }
   });
   return watchedState;

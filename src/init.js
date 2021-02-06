@@ -28,6 +28,36 @@ const parsers = (data, url) => {
   return parse;
 };
 
+const closesModal = (watched) => {
+  const watchedState = watched;
+  const buttonsClose = document.querySelectorAll('button[data-dismiss="modal"]');
+  buttonsClose.forEach((button) => {
+    button.addEventListener('click', (e) => {
+      e.preventDefault();
+      watchedState.modal = null;
+    });
+  });
+};
+
+const makeModalEvent = (watched) => {
+  const watchedState = watched;
+  const postsLi = document.querySelectorAll('.posts > ul > li');
+  postsLi.forEach((li) => {
+    li.addEventListener('click', (e) => {
+      const { target } = e;
+      // @ts-ignore
+      watchedState.openPosts = [...watchedState.openPosts, target.dataset.id];
+      // @ts-ignore
+      if (target.type === 'button') {
+        e.preventDefault();
+        // @ts-ignore
+        watchedState.modal = target.dataset.id;
+      }
+    });
+  });
+  closesModal(watched);
+};
+
 const addNewFeedPosts = (data, watched, state) => {
   const watchedState = watched;
   const parse = parsers(data, state.url);
@@ -40,7 +70,7 @@ const addNewFeedPosts = (data, watched, state) => {
     watchedState.success = 'success';
     watchedState.feeds = [parse.feeds, ...watchedState.feeds];
     watchedState.posts = [...parse.posts, ...watchedState.posts];
-    watchedState.listUrl = [...watchedState.listUrl, state.url];
+    makeModalEvent(watchedState);
   }
 };
 
@@ -53,6 +83,7 @@ const updatePost = (url, watch) => {
       const postsFeed = watchedState.posts.filter((post) => post.rssLink === url);
       const newPosts = xorBy(parse.posts, postsFeed, 'link');
       watchedState.posts = [...newPosts, ...watchedState.posts];
+      makeModalEvent(watchedState);
     })
     .finally(() => updatePost(url, watch)), 5000);
 };
@@ -62,10 +93,11 @@ const init = () => {
     valid: true,
     error: '',
     url: '',
-    listUrl: [],
     feeds: [],
     posts: [],
     success: '',
+    openPosts: [],
+    modal: null,
   };
 
   const watchedState = onChange(state);
