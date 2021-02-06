@@ -98,6 +98,7 @@ const init = () => {
             .then((response) => response.data)
             .then((data) => {
               addNewFeedPosts(data, watchedState, state);
+              updatePost(state.url, watchedState);
             })
             .catch((error) => {
               console.log(error);
