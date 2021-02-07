@@ -20,7 +20,7 @@ const isDuplicateFeeds = (link, feeds) => {
   return result;
 };
 
-const getContentsRss = (url) => axios.get(`https://api.allorigins.win/get?url=${encodeURIComponent(url)}`);
+const getContentsRss = (url) => axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(url)}`);
 
 const parsers = (data, url) => {
   const content = data.contents;
