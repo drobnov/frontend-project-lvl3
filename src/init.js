@@ -132,6 +132,7 @@ const init = () => {
               addNewFeedPosts(data, watchedState, state);
               updatePost(state.url, watchedState);
             })
+            .then(() => updatePost(state.url, watchedState))
             .catch((error) => {
               console.log(error);
               watchedState.error = 'networkError';
