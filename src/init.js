@@ -8,9 +8,10 @@ import onChange from './view.js';
 import parseRss from './parser.js';
 import text from './text.js';
 
-const schema = yup.string().url();
-
-const validate = (url) => schema.isValid(url);
+const validate = (url) => {
+  const schema = yup.string().url();
+  return schema.isValid(url);
+};
 
 const isDuplicateFeeds = (link, feeds) => {
   let result = true;
