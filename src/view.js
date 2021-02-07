@@ -17,8 +17,6 @@ const runApp = () => {
     },
   });
 };
-const initPromise = Promise.resolve();
-initPromise.then(() => runApp());
 
 const input = document.querySelector('input[name="url"]');
 const divFeedback = document.querySelector('div.feedback');
@@ -33,8 +31,6 @@ const renderingErrors = (error) => {
     divFeedback.textContent = '';
     divFeedback.classList.remove('text-danger');
   } else {
-    console.log(error);
-    console.log(i18n.t(`errors.${error}`));
     divFeedback.textContent = i18n.t(`errors.${error}`);
     divFeedback.classList.add('text-danger');
   }
@@ -148,6 +144,8 @@ const renderingModalOpen = (modalId, posts) => {
 };
 
 export default (state) => {
+  const initPromise = Promise.resolve();
+  initPromise.then(() => runApp());
   const watchedState = onChange(state, (path, value) => {
     if (path === 'valid') {
       if (!value) {
