@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import * as yup from 'yup';
-import { xorBy } from 'lodash';
+import { differenceBy } from 'lodash';
 import i18n from 'i18next';
 import onChange from './view.js';
 import parseRss from './parser.js';
@@ -10,7 +10,7 @@ import text from './text.js';
 
 const validate = (url) => {
   const schema = yup.string().url();
-  return schema.isValid(url);
+  return schema.isValid(url).then((valid) => valid);
 };
 
 const isDuplicateFeeds = (link, feeds) => {
@@ -84,7 +84,7 @@ const updatePost = (url, watch) => {
     .then((data) => {
       const parse = parsers(data, url);
       const postsFeed = watchedState.posts.filter((post) => post.rssLink === url);
-      const newPosts = xorBy(parse.posts, postsFeed, 'link');
+      const newPosts = differenceBy(parse.posts, postsFeed, 'link');
       watchedState.posts = [...newPosts, ...watchedState.posts];
       makeModalEvent(watchedState);
     })
@@ -133,7 +133,7 @@ const init = () => {
             .then((response) => response.data)
             .then((data) => {
               addNewFeedPosts(data, watchedState, state);
-              updatePost(state.url, watchedState);
+              setTimeout(() => updatePost(state.url, watchedState), 5000);
             })
             .catch((error) => {
               console.log(error);
@@ -151,20 +151,7 @@ export default () => {
     resources: {
       en: {
         translation: {
-          errors: {
-            inValidUrl: 'Must be valid url',
-            inValidRss: "This source doesn't contain valid rss",
-            rssExists: 'Rss already exists',
-            networkError: 'Network error',
-          },
-          success: 'Rss has been loaded',
-          h2: {
-            feeds: 'Feeds',
-            posts: 'Posts',
-          },
-          button: {
-            preview: 'Preview',
-          },
+          ...text,
         },
       },
     },
