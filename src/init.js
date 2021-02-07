@@ -10,7 +10,7 @@ import text from './text.js';
 
 const validate = (url) => {
   const schema = yup.string().url();
-  return schema.isValid(url).then((valid) => valid);
+  return schema.isValid(url);
 };
 
 const isDuplicateFeeds = (link, feeds) => {
