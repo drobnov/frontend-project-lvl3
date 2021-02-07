@@ -77,18 +77,20 @@ const addNewFeedPosts = (data, watched, state) => {
   }
 };
 
-const updatePost = (url, watch) => {
+const updatePost = (url, watch, posts) => {
   const watchedState = watch;
   setTimeout(() => getContentsRss(url)
     .then((response) => response.data)
     .then((data) => {
       const parse = parsers(data, url);
-      const postsFeed = watchedState.posts.filter((post) => post.rssLink === url);
+      const postsFeed = posts.filter((post) => post.rssLink === url);
       const newPosts = differenceBy(parse.posts, postsFeed, 'link');
-      watchedState.posts = [...newPosts, ...watchedState.posts];
-      makeModalEvent(watchedState);
+      if (newPosts.length !== 0) {
+        watchedState.posts = [...newPosts, ...watchedState.posts];
+        makeModalEvent(watchedState);
+      }
     })
-    .finally(() => updatePost(url, watch)), 5000);
+    .finally(() => updatePost(url, watch, posts)), 5000);
 };
 
 const init = () => {
@@ -133,10 +135,9 @@ const init = () => {
             .then((response) => response.data)
             .then((data) => {
               addNewFeedPosts(data, watchedState, state);
-              setTimeout(() => updatePost(state.url, watchedState), 5000);
+              setTimeout(() => updatePost(state.url, watchedState, state.posts), 5000);
             })
-            .catch((error) => {
-              console.log(error);
+            .catch(() => {
               watchedState.error = 'networkError';
             });
         }

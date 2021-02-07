@@ -20,7 +20,7 @@ const parserFeeds = (rss, rssLink) => {
   return result;
 };
 
-const parsePosts = (rss, parentsLink, rssLink) => {
+const parsePosts = (rss, rssLink) => {
   const posts = rss.querySelectorAll('item');
   const result = Array.from(posts).map((item) => {
     const title = item.querySelector('title');
@@ -28,7 +28,6 @@ const parsePosts = (rss, parentsLink, rssLink) => {
     const link = item.querySelector('link');
     const id = uniqueId();
     return ({
-      parentsLink,
       title: title.childNodes[0].textContent,
       description: description.childNodes[0].textContent,
       link: link.nextSibling.textContent,
@@ -45,7 +44,7 @@ const parseRss = (element, rssLink) => {
     return null;
   }
   const feeds = parserFeeds(elementRss, rssLink);
-  const posts = parsePosts(elementRss, feeds.link, rssLink);
+  const posts = parsePosts(elementRss, rssLink);
   return { feeds, posts };
 };
 
