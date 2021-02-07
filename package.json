@@ -1,8 +1,9 @@
 {
   "name": "@hexlet/code",
   "version": "1.0.0",
-  "description": "[![Actions Status](https://github.com/drobnov/frontend-project-lvl3/workflows/hexlet-check/badge.svg)](https://github.com/drobnov/frontend-project-lvl3/actions)",
-  "main": "src/init.js",
+  "description": "RSS aggregator",
+  "main": "./src/init.js",
+  "type": "module",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
@@ -10,7 +11,15 @@
     "type": "git",
     "url": "git+https://github.com/drobnov/frontend-project-lvl3.git"
   },
-  "author": "",
+  "keywords": [
+    "rss",
+    "feed",
+    "aggregator",
+    "frontend",
+    "javascript",
+    "webpack"
+  ],
+  "author": "Drobnov Pavlo",
   "license": "ISC",
   "bugs": {
     "url": "https://github.com/drobnov/frontend-project-lvl3/issues"
