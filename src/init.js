@@ -3,8 +3,10 @@
 import axios from 'axios';
 import * as yup from 'yup';
 import { xorBy } from 'lodash';
+import i18n from 'i18next';
 import onChange from './view.js';
 import parseRss from './parser.js';
+import text from './text.js';
 
 const schema = yup.string().url();
 
@@ -141,4 +143,16 @@ const init = () => {
   });
 };
 
-export default init;
+export default () => {
+  i18n.init({
+    lng: 'en',
+    debug: true,
+    resources: {
+      en: {
+        translation: {
+          ...text,
+        },
+      },
+    },
+  }).then(() => init());
+};

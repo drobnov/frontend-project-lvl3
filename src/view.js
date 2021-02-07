@@ -2,21 +2,6 @@
 
 import onChange from 'on-change';
 import i18n from 'i18next';
-import text from './text.js';
-
-const runApp = () => {
-  i18n.init({
-    lng: 'en',
-    debug: true,
-    resources: {
-      en: {
-        translation: {
-          ...text,
-        },
-      },
-    },
-  });
-};
 
 const input = document.querySelector('input[name="url"]');
 const divFeedback = document.querySelector('div.feedback');
@@ -144,8 +129,6 @@ const renderingModalOpen = (modalId, posts) => {
 };
 
 export default (state) => {
-  const initPromise = Promise.resolve();
-  initPromise.then(() => runApp());
   const watchedState = onChange(state, (path, value) => {
     if (path === 'valid') {
       if (!value) {
