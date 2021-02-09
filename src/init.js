@@ -145,14 +145,17 @@ const init = () => {
   });
 };
 
-export default () => Promise.resolve().then(() => i18n.init({
-  lng: 'en',
-  debug: true,
-  resources: {
-    en: {
-      translation: {
-        ...text,
+export default () => {
+  const app = i18n.init({
+    lng: 'en',
+    debug: true,
+    resources: {
+      en: {
+        translation: {
+          ...text,
+        },
       },
     },
-  },
-}).then(() => init()));
+  }).then(() => init());
+  return app;
+};
