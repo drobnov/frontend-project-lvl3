@@ -145,16 +145,14 @@ const init = () => {
   });
 };
 
-export default async () => {
-  await i18n.init({
-    lng: 'en',
-    debug: true,
-    resources: {
-      en: {
-        translation: {
-          ...text,
-        },
+export default i18n.init({
+  lng: 'en',
+  debug: true,
+  resources: {
+    en: {
+      translation: {
+        ...text,
       },
     },
-  }).then(() => init());
-};
+  },
+}).then(() => init());
