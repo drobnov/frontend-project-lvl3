@@ -145,8 +145,8 @@ const init = () => {
   });
 };
 
-export default () => {
-  i18n.init({
+export default async () => {
+  await i18n.init({
     lng: 'en',
     debug: true,
     resources: {
