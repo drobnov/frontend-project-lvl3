@@ -156,4 +156,4 @@ export default () => i18n.init({
     },
   },
 })
-  .then(() => init());
+  .then(init);
