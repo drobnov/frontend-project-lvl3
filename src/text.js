@@ -1,5 +1,3 @@
-// @ts-check
-
 export default {
   errors: {
     inValidUrl: 'Must be valid url',

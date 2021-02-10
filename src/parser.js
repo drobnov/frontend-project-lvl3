@@ -1,4 +1,3 @@
-// @ts-check
 import { uniqueId } from 'lodash';
 
 const parserDom = (rss) => {
