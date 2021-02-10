@@ -145,7 +145,8 @@ export default (state) => {
       form.reset();
       renderingFeeds(watchedState.feeds);
     } if (path === 'posts') {
-      renderingPosts(watchedState.posts, watchedState.openPosts);
+      // @ts-ignore
+      renderingPosts(value, watchedState.openPosts);
     } if (path === 'openPosts') {
       renderingModalClass(value);
     } if (path === 'modal') {

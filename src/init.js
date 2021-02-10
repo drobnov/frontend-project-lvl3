@@ -2,7 +2,7 @@
 
 import axios from 'axios';
 import * as yup from 'yup';
-import { differenceBy } from 'lodash';
+import { differenceBy, uniqBy } from 'lodash';
 import i18n from 'i18next';
 import onChange from './view.js';
 import parseRss from './parser.js';
@@ -23,7 +23,7 @@ const isDuplicateFeeds = (link, feeds) => {
   return result;
 };
 
-const getContentsRss = (url) => axios.get(`https://hexlet-allorigins.herokuapp.com/get?url=${encodeURIComponent(url)}`);
+const getContentsRss = (url) => axios.get(`https://hexlet-allorigins.herokuapp.com/get?disableCache=true&url=${encodeURIComponent(url)}`);
 
 const parsers = (data, url) => {
   const content = data.contents;
@@ -79,18 +79,18 @@ const addNewFeedPosts = (data, watched, state) => {
 
 const updatePost = (url, watch, posts) => {
   const watchedState = watch;
-  setTimeout(() => getContentsRss(url)
+  getContentsRss(url)
     .then((response) => response.data)
     .then((data) => {
       const parse = parsers(data, url);
       const postsFeed = posts.filter((post) => post.rssLink === url);
       const newPosts = differenceBy(parse.posts, postsFeed, 'link');
       if (newPosts.length !== 0) {
-        watchedState.posts = [...newPosts, ...watchedState.posts];
+        watchedState.posts = uniqBy([...newPosts, ...watchedState.posts], 'link');
         makeModalEvent(watchedState);
       }
     })
-    .finally(() => updatePost(url, watch, posts)), 5000);
+    .finally(() => setTimeout(() => updatePost(url, watch, posts), 5000));
 };
 
 const init = () => {
@@ -135,8 +135,8 @@ const init = () => {
             .then((response) => response.data)
             .then((data) => {
               addNewFeedPosts(data, watchedState, state);
-              setTimeout(() => updatePost(state.url, watchedState, state.posts), 5000);
             })
+            .then(() => setTimeout(() => updatePost(state.url, watchedState, state.posts), 5000))
             .catch(() => {
               watchedState.error = 'networkError';
             });
