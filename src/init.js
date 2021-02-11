@@ -89,6 +89,9 @@ const updatePost = (url, watch, posts) => {
         makeModalEvent(watchedState);
       }
     })
+    .catch((error) => {
+      console.log(error);
+    })
     .finally(() => setTimeout(() => updatePost(url, watch, posts), 5000));
 };
 
@@ -140,6 +143,10 @@ const init = () => {
               watchedState.error = 'networkError';
             });
         }
+      })
+      .catch(() => {
+        watchedState.error = 'inValidUrl';
+        watchedState.valid = false;
       });
   });
 };
@@ -155,4 +162,7 @@ export default () => i18n.init({
     },
   },
 })
-  .then(() => init());
+  .then(() => init())
+  .catch((error) => {
+    console.log(error);
+  });
