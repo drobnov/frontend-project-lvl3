@@ -1,5 +1,5 @@
 develop:
-	npx webpack serve
+	npx cross-env NODE_ENV=development webpack serve --progress
 
 install:
 	npm ci

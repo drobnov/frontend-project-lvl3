@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 import axios from 'axios';
 import * as yup from 'yup';
 import { differenceBy, uniqBy } from 'lodash';
