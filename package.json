@@ -4,7 +4,8 @@
   "description": "RSS aggregator",
   "main": "./src/init.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "webpack",
+    "test": "jest --colors"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,10 @@
     "url": "https://github.com/drobnov/frontend-project-lvl3/issues"
   },
   "homepage": "https://github.com/drobnov/frontend-project-lvl3#readme",
+  "jest": {
+    "verbose": true,
+    "testURL": "http://localhost/"
+  },
   "dependencies": {
     "axios": "^0.21.1",
     "bootstrap": "^4.6.0",
