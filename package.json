@@ -22,6 +22,7 @@
   "author": "Drobnov Pavlo",
   "license": "ISC",
   "bugs": {
+    "test": "jest --colors",
     "url": "https://github.com/drobnov/frontend-project-lvl3/issues"
   },
   "homepage": "https://github.com/drobnov/frontend-project-lvl3#readme",
