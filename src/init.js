@@ -1,4 +1,3 @@
-/* eslint-disable no-param-reassign */
 import axios from 'axios';
 import * as yup from 'yup';
 import { differenceBy, uniqBy } from 'lodash';
@@ -47,12 +46,9 @@ const makeModalEvent = (watched) => {
   postsLi.forEach((li) => {
     li.addEventListener('click', (e) => {
       const { target } = e;
-      // @ts-ignore
       watchedState.openPosts = [...watchedState.openPosts, target.dataset.id];
-      // @ts-ignore
       if (target.type === 'button') {
         e.preventDefault();
-        // @ts-ignore
         watchedState.modal = target.dataset.id;
       }
     });
@@ -114,7 +110,6 @@ const init = () => {
 
   inputUrl.addEventListener('input', (e) => {
     e.preventDefault();
-    // @ts-ignore
     const { value } = e.target;
     watchedState.url = value;
   });

@@ -109,7 +109,6 @@ const renderingModalOpen = (modalId, posts) => {
     const modalBody = document.querySelector('.modal-body');
     modalBody.textContent = description;
     const modalArticle = document.querySelector('.modal-footer > a');
-    // @ts-ignore
     modalArticle.href = link;
     const modalBackdrop = createsHtmlEl('div', { class: 'modal-backdrop fade show' });
     const footer = document.querySelector('footer');
@@ -143,7 +142,6 @@ export default (state) => {
       form.reset();
       renderingFeeds(watchedState.feeds);
     } if (path === 'posts') {
-      // @ts-ignore
       renderingPosts(value, watchedState.openPosts);
     } if (path === 'openPosts') {
       renderingModalClass(value);
