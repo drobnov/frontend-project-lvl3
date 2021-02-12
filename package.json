@@ -4,7 +4,7 @@
   "description": "RSS aggregator",
   "main": "./src/init.js",
   "scripts": {
-    "build": "webpack",
+    "build": "rm -rf dist NODE_ENV=production npx webpack",
     "test": "jest --colors"
   },
   "repository": {
@@ -22,14 +22,12 @@
   "author": "Drobnov Pavlo",
   "license": "ISC",
   "bugs": {
-    "test": "jest --colors",
     "url": "https://github.com/drobnov/frontend-project-lvl3/issues"
   },
   "homepage": "https://github.com/drobnov/frontend-project-lvl3#readme",
   "jest": {
-    "setupFilesAfterEnv": [
-      "./jest.setup.js"
-    ]
+    "verbose": true,
+    "testURL": "http://localhost/"
   },
   "dependencies": {
     "axios": "^0.21.1",
