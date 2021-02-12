@@ -27,8 +27,9 @@
   },
   "homepage": "https://github.com/drobnov/frontend-project-lvl3#readme",
   "jest": {
-    "verbose": true,
-    "testURL": "http://localhost/"
+    "setupFilesAfterEnv": [
+      "./jest.setup.js"
+    ]
   },
   "dependencies": {
     "axios": "^0.21.1",
